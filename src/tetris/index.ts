@@ -1,43 +1,23 @@
-import { InputHandler } from './InputHandler'
+import { Tetromino } from './Tetromino'
 
-export const BlockTypes = {
-  Empty: null,
-  straight: [[1, 1, 1, 1]],
-  square: [
-    [1, 1],
-    [1, 1],
-  ],
-  T: [
-    [1, 1, 1],
-    [0, 1, 0],
-  ],
-  L: [
-    [1, 0],
-    [1, 0],
-    [1, 1],
-  ],
-  skew: [
-    [0, 1, 1],
-    [1, 1, 0],
-  ],
-}
+const ROWS = 20
+const COLS = 10
+const BLOCK_SIZE = 30
 
 export class Game {
   isGameOver: boolean = false
-  input: InputHandler
-  board: (number[][] | null)[][] = []
-  x = 100
+  board: (Tetromino | null)[][] = []
+  currentTetromino: any
 
   constructor() {
     this.initBoard()
-    this.input = new InputHandler()
   }
 
   private initBoard() {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 20; i++) {
       this.board[i] = []
-      for (let j = 0; j < 8; j++) {
-        this.board[i][j] = BlockTypes.Empty
+      for (let j = 0; j < 10; j++) {
+        this.board[i][j] = null
       }
     }
   }
@@ -45,10 +25,21 @@ export class Game {
   update(deltaTime: number) {}
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.beginPath()
-    ctx.arc(this.x, 100, 50, 0, 2 * Math.PI)
-    ctx.fillStyle = 'blue'
-    ctx.fill()
-    ctx.closePath()
+    const drawBlock = (x: number, y: number, color: string) => {
+      ctx.fillStyle = color
+      ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+      ctx.strokeStyle = 'black'
+      ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+    }
+
+    function drawBoard() {
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+          drawBlock(col, row, 'lightgray')
+        }
+      }
+    }
+
+    drawBoard()
   }
 }

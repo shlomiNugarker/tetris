@@ -4,7 +4,7 @@ import { Game } from './tetris/index'
 
 const canvas = <HTMLCanvasElement>document.getElementById('canvas')
 const ctx = canvas.getContext('2d')!
-canvas.width = 500
+canvas.width = 300
 canvas.height = 500
 
 const game = new Game()
