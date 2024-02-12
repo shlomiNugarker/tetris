@@ -1,8 +1,14 @@
-#app {
-    background-color: rgb(51, 51, 64);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+#app {
+  background-color: rgb(51, 51, 64);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
