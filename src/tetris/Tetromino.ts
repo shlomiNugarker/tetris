@@ -52,7 +52,7 @@ export class Tetromino {
     })
   }
 
-  update(deltaTime: number, timeStamp: number) {
+  update(_deltaTime: number, timeStamp: number) {
     if (timeStamp - this.lastMoveDownTime > this.moveDownInterval) {
       this.lastMoveDownTime = timeStamp
       this.moveDown()
@@ -152,7 +152,7 @@ export class Tetromino {
     return rightPoint
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(_ctx: CanvasRenderingContext2D) {
     const { x, y } = this
     for (let row = 0; row < this.shape.length; row++) {
       for (let col = 0; col < this.shape[row].length; col++) {
