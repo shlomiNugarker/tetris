@@ -1,51 +1,63 @@
+import { InputHandler } from './Input'
 import { Tetromino } from './Tetromino'
 
 export class Game {
   isGameOver: boolean = false
-  board: (Tetromino | null)[][] = []
+  board: string[][] = []
   currentTetromino: Tetromino | null = null
   canvas: HTMLCanvasElement
+  ctx: CanvasRenderingContext2D
+  input: InputHandler
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
+    this.canvas.width = 500
+    this.canvas.height = 500
+    this.ctx = canvas.getContext('2d')!
+
+    this.input = new InputHandler(this)
+
     this.initBoard()
+    this.addTetromino()
   }
 
   private initBoard() {
     for (let i = 0; i < 20; i++) {
       this.board[i] = []
       for (let j = 0; j < 20; j++) {
-        this.board[i][j] = null
+        this.board[i][j] = Math.random() > 0.5 ? 'sk' : ''
       }
     }
+  }
+
+  addTetromino() {
+    this.currentTetromino = new Tetromino(this)
   }
 
   update(deltaTime: number) {
-    this.currentTetromino = new Tetromino(this, '0', '')
+    this.currentTetromino?.update(this.input.keys, deltaTime)
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    this.drawBoard(ctx)
-    this.currentTetromino?.draw(ctx)
+  draw() {
+    this.drawBoard()
+    this.currentTetromino?.draw(this.ctx)
   }
 
-  drawBlock(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    color: string
-  ) {
+  drawBlock(x: number, y: number, color: string) {
     const BLOCK_SIZE_WIDTH = this.canvas.width / 20
     const BLOCK_SIZE_HEIGHT = this.canvas.height / 20
-    ctx.fillStyle = color
-    ctx.fillRect(
+
+    this.ctx.fillStyle = color
+
+    this.ctx.fillRect(
       x * BLOCK_SIZE_WIDTH,
       y * BLOCK_SIZE_HEIGHT,
       BLOCK_SIZE_WIDTH,
       BLOCK_SIZE_HEIGHT
     )
-    ctx.strokeStyle = 'black'
-    ctx.strokeRect(
+    this.ctx.strokeStyle = 'white'
+
+    this.ctx.strokeRect(
       x * BLOCK_SIZE_WIDTH,
       y * BLOCK_SIZE_HEIGHT,
       BLOCK_SIZE_WIDTH,
@@ -53,11 +65,24 @@ export class Game {
     )
   }
 
-  drawBoard(ctx: CanvasRenderingContext2D) {
+  drawBoard() {
     for (let row = 0; row < this.board.length; row++) {
       for (let col = 0; col < this.board[0].length; col++) {
-        this.drawBlock(ctx, col, row, 'lightgray')
+        if (this.board[row][col]) {
+          const color = this.getBlockColor(this.board[row][col])
+          this.drawBlock(col, row, color)
+        } else this.drawBlock(col, row, 'lightgray')
       }
     }
+  }
+
+  private getBlockColor(blockType: string): string {
+    const colorMap: { [key: string]: string } = {
+      st: 'blue',
+      sq: 'red',
+      t: 'green',
+      sk: 'orange',
+    }
+    return colorMap[blockType] || 'black'
   }
 }
