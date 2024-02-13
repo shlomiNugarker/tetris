@@ -70,6 +70,10 @@ export class Tetromino {
   }
   rotate() {}
 
+  isNextMoveValid() {
+    console.log('isNextMoveValid')
+  }
+
   draw(ctx: CanvasRenderingContext2D) {
     const { x, y } = this
 
