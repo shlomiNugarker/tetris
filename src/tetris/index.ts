@@ -33,7 +33,7 @@ export class Game {
   update(deltaTime: number, timeStamp: number) {
     this.currentTetromino?.update(deltaTime, timeStamp)
 
-    if (this.currentTetromino?.isMoveEnd()) {
+    if (this.currentTetromino?.isMoveEnd) {
       this.currentTetromino.addTetrominoToMatrix()
       this.currentTetromino = null
       this.currentTetromino = new Tetromino(this)

@@ -30,6 +30,7 @@ export class Tetromino {
   public game: Game
   moveDownInterval = 1000
   lastMoveDownTime = 0
+  isMoveEnd = false
 
   private keyState: { [key: string]: boolean } = {}
 
@@ -41,7 +42,7 @@ export class Tetromino {
   constructor(game: Game) {
     this.game = game
     this.x = 9
-    this.y = -4
+    this.y = 0
 
     window.addEventListener('keydown', (event) => {
       this.keyState[event.key] = true
@@ -74,14 +75,19 @@ export class Tetromino {
   }
 
   moveDown(dy: number = 1) {
-    this.y += dy
+    if (this.isNextMoveEmpty(this.x, this.y + dy)) {
+      this.y += dy
+    } else this.isMoveEnd = true
   }
   moveRight(dx: number = 1) {
-    if (this.x + this.getRightPoint().x === 19) this.x = 0
-    else this.x += dx
+    if (this.isNextMoveEmpty(this.x + dx, this.y)) {
+      this.x += dx
+    }
   }
   moveLeft(dx: number = 1) {
-    this.x -= dx
+    if (this.isNextMoveEmpty(this.x - dx, this.y)) {
+      this.x -= dx
+    }
   }
   rotate() {
     const rotatedShape: string[][] = []
@@ -105,8 +111,28 @@ export class Tetromino {
     this.shape = rotatedShape
   }
 
-  isMoveEnd() {
-    return this.y + this.getBottomPoint().y === 19
+  isNextMoveEmpty(nextX: number, nextY: number): boolean {
+    const shape = this.shape
+    const rows = shape.length
+    const cols = shape[0].length
+
+    if (
+      nextX < 0 ||
+      nextX + cols > this.game.board[0].length ||
+      nextY + rows > this.game.board.length
+    ) {
+      return false
+    }
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        if (shape[row][col] && this.game.board[nextY + row][nextX + col]) {
+          return false
+        }
+      }
+    }
+
+    return true
   }
 
   addTetrominoToMatrix() {
@@ -126,30 +152,6 @@ export class Tetromino {
         }
       }
     }
-  }
-
-  getBottomPoint() {
-    let bottomPoint = { x: 0, y: 0 }
-    for (let y = 0; y < this.shape.length; y++) {
-      for (let x = 0; x < this.shape[y].length; x++) {
-        if (this.shape[y][x] !== '' && y > bottomPoint.y) {
-          bottomPoint = { x, y }
-        }
-      }
-    }
-    return bottomPoint
-  }
-
-  getRightPoint() {
-    let rightPoint = { x: 0, y: 0 }
-    for (let y = 0; y < this.shape.length; y++) {
-      for (let x = 0; x < this.shape[y].length; x++) {
-        if (this.shape[y][x] !== '' && x > rightPoint.x) {
-          rightPoint = { x, y }
-        }
-      }
-    }
-    return rightPoint
   }
 
   draw(_ctx: CanvasRenderingContext2D) {
