@@ -25,7 +25,7 @@ export class Game {
     for (let i = 0; i < 20; i++) {
       this.board[i] = []
       for (let j = 0; j < 20; j++) {
-        this.board[i][j] = Math.random() > 0.5 ? 'sk' : ''
+        this.board[i][j] = ''
       }
     }
   }
@@ -34,8 +34,8 @@ export class Game {
     this.currentTetromino = new Tetromino(this)
   }
 
-  update(deltaTime: number) {
-    this.currentTetromino?.update(this.input.keys, deltaTime)
+  update(deltaTime: number, timeStamp: number) {
+    this.currentTetromino?.update(this.input.keys, deltaTime, timeStamp)
   }
 
   draw() {
@@ -76,13 +76,14 @@ export class Game {
     }
   }
 
-  private getBlockColor(blockType: string): string {
+  getBlockColor(blockType: string): string {
     const colorMap: { [key: string]: string } = {
       st: 'blue',
       sq: 'red',
       t: 'green',
+      l: 'black',
       sk: 'orange',
     }
-    return colorMap[blockType] || 'black'
+    return colorMap[blockType] || 'lightgray'
   }
 }

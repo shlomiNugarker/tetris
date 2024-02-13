@@ -21,37 +21,66 @@ const SHAPES = {
   ],
 }
 
+const types: ('straight' | 'square' | 'tTetromino' | 'lTetromino' | 'skew')[] =
+  ['straight', 'square', 'tTetromino', 'lTetromino', 'skew']
+
 export class Tetromino {
   public x: number
   public y: number
   public game: Game
-  shape: string[] | string[][] = SHAPES.lTetromino
+  moveDownInterval = 1000
+  lastMoveDownTime = 0
+
+  type: 'straight' | 'square' | 'tTetromino' | 'lTetromino' | 'skew' =
+    types[Math.floor(Math.random() * types.length)]
+
+  shape: string[][] | string[] = SHAPES[this.type]
 
   constructor(game: Game) {
     this.game = game
-    this.x = 6
-    this.y = 5
+    this.x = 9
+    this.y = 0
   }
 
-  update(input: string[], deltaTime: number) {
+  update(input: string[], deltaTime: number, timeStamp: number) {
+    if (timeStamp - this.lastMoveDownTime > this.moveDownInterval) {
+      this.lastMoveDownTime = timeStamp
+      this.moveDown()
+    }
+
     if (input.includes('ArrowRight')) {
-      this.y += 1
+      this.moveRight()
     } else if (input.includes('ArrowLeft')) {
-      this.y -= 1
+      this.moveLeft()
     } else if (input.includes('ArrowUp')) {
       this.rotate()
     } else if (input.includes('ArrowDown')) {
+      this.moveDown(2)
     }
   }
 
-  public draw(ctx: CanvasRenderingContext2D) {
+  moveDown(dy: number = 1) {
+    this.y += dy
+  }
+  moveRight(dx: number = 1) {
+    this.x += dx
+  }
+  moveLeft(dx: number = 1) {
+    this.x -= dx
+  }
+  rotate() {}
+
+  draw(ctx: CanvasRenderingContext2D) {
     const { x, y } = this
 
-    const blockSize = this.game.canvas.width / 20
-
-    const xPos = x * blockSize
-    const yPos = y * blockSize
+    for (let row = 0; row < this.shape.length; row++) {
+      for (let col = 0; col < this.shape[row].length; col++) {
+        const blockType = this.shape[row][col]
+        if (blockType) {
+          const color = this.game.getBlockColor(blockType)
+          this.game.drawBlock(x + col, y + row, color)
+        }
+      }
+    }
   }
-
-  public rotate() {}
 }
