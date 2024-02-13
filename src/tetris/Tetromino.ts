@@ -1,39 +1,56 @@
 import { Game } from '.'
 
+const SHAPES = {
+  straight: ['st', 'st', 'st', 'st'],
+  square: [
+    ['sq', 'sq'],
+    ['sq', 'sq'],
+  ],
+  tTetromino: [
+    ['t', 't', 't'],
+    ['', 't', ''],
+  ],
+  lTetromino: [
+    ['l', ''],
+    ['l', ''],
+    ['l', 'l'],
+  ],
+  skew: [
+    ['', 'sk', 'sk'],
+    ['sk', 'sk', ''],
+  ],
+}
+
 export class Tetromino {
   public x: number
   public y: number
-  public rotation: number
   public game: Game
-  public type: string
-  public color: string
+  shape: string[] | string[][] = SHAPES.lTetromino
 
-  constructor(game: Game, type: string, color: string) {
+  constructor(game: Game) {
     this.game = game
-    this.x = 9
-    this.y = 4
-    this.rotation = 0
-    this.type = type
-    this.color = color
+    this.x = 6
+    this.y = 5
+  }
+
+  update(input: string[], deltaTime: number) {
+    if (input.includes('ArrowRight')) {
+      this.y += 1
+    } else if (input.includes('ArrowLeft')) {
+      this.y -= 1
+    } else if (input.includes('ArrowUp')) {
+      this.rotate()
+    } else if (input.includes('ArrowDown')) {
+    }
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
-    const { x, y, color } = this
-    const blockSize = this.game.canvas.width / 20
+    const { x, y } = this
 
-    ctx.fillStyle = color
+    const blockSize = this.game.canvas.width / 20
 
     const xPos = x * blockSize
     const yPos = y * blockSize
-
-    ctx.fillRect(xPos, yPos, blockSize, blockSize)
-    ctx.strokeStyle = 'red'
-    ctx.strokeRect(xPos, yPos, blockSize, blockSize)
-  }
-
-  public move(dx: number, dy: number) {
-    this.x += dx
-    this.y += dy
   }
 
   public rotate() {}
