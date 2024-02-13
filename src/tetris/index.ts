@@ -32,6 +32,12 @@ export class Game {
 
   update(deltaTime: number, timeStamp: number) {
     this.currentTetromino?.update(deltaTime, timeStamp)
+
+    if (this.currentTetromino?.isMoveEnd()) {
+      this.currentTetromino.addTetrominoToMatrix()
+      this.currentTetromino = null
+      this.currentTetromino = new Tetromino(this)
+    }
   }
 
   draw() {
@@ -74,12 +80,22 @@ export class Game {
 
   getBlockColor(blockType: string): string {
     const colorMap: { [key: string]: string } = {
-      st: 'blue',
-      sq: 'red',
-      t: 'green',
-      l: 'black',
-      sk: 'orange',
+      straight: 'blue',
+      square: 'red',
+      tTetromino: 'green',
+      lTetromino: 'black',
+      skew: 'orange',
     }
     return colorMap[blockType] || 'lightgray'
+  }
+
+  getRandomColor() {
+    const red = Math.floor(Math.random() * 256)
+    const green = Math.floor(Math.random() * 256)
+    const blue = Math.floor(Math.random() * 256)
+
+    const color = 'rgb(' + red + ', ' + green + ', ' + blue + ')'
+
+    return color
   }
 }

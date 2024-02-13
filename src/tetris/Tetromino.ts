@@ -1,23 +1,23 @@
 import { Game } from '.'
 
 const SHAPES = {
-  straight: [['st'], ['st'], ['st'], ['st']],
+  straight: [['straight'], ['straight'], ['straight'], ['straight']],
   square: [
-    ['sq', 'sq'],
-    ['sq', 'sq'],
+    ['square', 'square'],
+    ['square', 'square'],
   ],
   tTetromino: [
-    ['t', 't', 't'],
-    ['', 't', ''],
+    ['tTetromino', 'tTetromino', 'tTetromino'],
+    ['', 'tTetromino', ''],
   ],
   lTetromino: [
-    ['l', ''],
-    ['l', ''],
-    ['l', 'l'],
+    ['lTetromino', ''],
+    ['lTetromino', ''],
+    ['lTetromino', 'lTetromino'],
   ],
   skew: [
-    ['', 'sk', 'sk'],
-    ['sk', 'sk', ''],
+    ['', 'skew', 'skew'],
+    ['skew', 'skew', ''],
   ],
 }
 
@@ -41,7 +41,7 @@ export class Tetromino {
   constructor(game: Game) {
     this.game = game
     this.x = 9
-    this.y = 0
+    this.y = -4
 
     window.addEventListener('keydown', (event) => {
       this.keyState[event.key] = true
@@ -68,7 +68,7 @@ export class Tetromino {
       this.rotate()
       delete this.keyState['ArrowUp']
     } else if (this.keyState['ArrowDown']) {
-      this.moveDown(2)
+      this.moveDown(1)
       delete this.keyState['ArrowDown']
     }
   }
@@ -77,7 +77,8 @@ export class Tetromino {
     this.y += dy
   }
   moveRight(dx: number = 1) {
-    this.x += dx
+    if (this.x + this.getRightPoint().x === 19) this.x = 0
+    else this.x += dx
   }
   moveLeft(dx: number = 1) {
     this.x -= dx
@@ -104,13 +105,55 @@ export class Tetromino {
     this.shape = rotatedShape
   }
 
-  isNextMoveValid() {
-    console.log('isNextMoveValid')
+  isMoveEnd() {
+    return this.y + this.getBottomPoint().y === 19
+  }
+
+  addTetrominoToMatrix() {
+    for (let y = 0; y < this.shape.length; y++) {
+      for (let x = 0; x < this.shape[y].length; x++) {
+        const matrixX = this.x + x
+        const matrixY = this.y + y
+
+        if (
+          matrixX >= 0 &&
+          matrixX < this.game.board[0].length &&
+          matrixY >= 0 &&
+          matrixY < this.game.board.length &&
+          this.shape[y][x] !== ''
+        ) {
+          this.game.board[matrixY][matrixX] = this.type
+        }
+      }
+    }
+  }
+
+  getBottomPoint() {
+    let bottomPoint = { x: 0, y: 0 }
+    for (let y = 0; y < this.shape.length; y++) {
+      for (let x = 0; x < this.shape[y].length; x++) {
+        if (this.shape[y][x] !== '' && y > bottomPoint.y) {
+          bottomPoint = { x, y }
+        }
+      }
+    }
+    return bottomPoint
+  }
+
+  getRightPoint() {
+    let rightPoint = { x: 0, y: 0 }
+    for (let y = 0; y < this.shape.length; y++) {
+      for (let x = 0; x < this.shape[y].length; x++) {
+        if (this.shape[y][x] !== '' && x > rightPoint.x) {
+          rightPoint = { x, y }
+        }
+      }
+    }
+    return rightPoint
   }
 
   draw(ctx: CanvasRenderingContext2D) {
     const { x, y } = this
-
     for (let row = 0; row < this.shape.length; row++) {
       for (let col = 0; col < this.shape[row].length; col++) {
         const blockType = this.shape[row][col]
