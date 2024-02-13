@@ -79,16 +79,19 @@ export class Tetromino {
       this.y += dy
     } else this.isMoveEnd = true
   }
+
   moveRight(dx: number = 1) {
     if (this.isNextMoveEmpty(this.x + dx, this.y)) {
       this.x += dx
     }
   }
+
   moveLeft(dx: number = 1) {
     if (this.isNextMoveEmpty(this.x - dx, this.y)) {
       this.x -= dx
     }
   }
+
   rotate() {
     const rotatedShape: string[][] = []
     const shape = this.shape
@@ -108,11 +111,12 @@ export class Tetromino {
       return
     }
 
-    this.shape = rotatedShape
+    if (this.isNextMoveEmpty(this.x, this.y, rotatedShape)) {
+      this.shape = rotatedShape
+    }
   }
 
-  isNextMoveEmpty(nextX: number, nextY: number): boolean {
-    const shape = this.shape
+  isNextMoveEmpty(nextX: number, nextY: number, shape = this.shape): boolean {
     const rows = shape.length
     const cols = shape[0].length
 
