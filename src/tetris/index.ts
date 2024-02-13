@@ -1,4 +1,3 @@
-import { InputHandler } from './Input'
 import { Tetromino } from './Tetromino'
 
 export class Game {
@@ -7,15 +6,12 @@ export class Game {
   currentTetromino: Tetromino | null = null
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
-  input: InputHandler
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.canvas.width = 500
     this.canvas.height = 500
     this.ctx = canvas.getContext('2d')!
-
-    this.input = new InputHandler(this)
 
     this.initBoard()
     this.addTetromino()
@@ -35,7 +31,7 @@ export class Game {
   }
 
   update(deltaTime: number, timeStamp: number) {
-    this.currentTetromino?.update(this.input.keys, deltaTime, timeStamp)
+    this.currentTetromino?.update(deltaTime, timeStamp)
   }
 
   draw() {

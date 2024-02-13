@@ -1,7 +1,7 @@
 import { Game } from '.'
 
 const SHAPES = {
-  straight: ['st', 'st', 'st', 'st'],
+  straight: [['st'], ['st'], ['st'], ['st']],
   square: [
     ['sq', 'sq'],
     ['sq', 'sq'],
@@ -31,31 +31,45 @@ export class Tetromino {
   moveDownInterval = 1000
   lastMoveDownTime = 0
 
+  private keyState: { [key: string]: boolean } = {}
+
   type: 'straight' | 'square' | 'tTetromino' | 'lTetromino' | 'skew' =
     types[Math.floor(Math.random() * types.length)]
 
-  shape: string[][] | string[] = SHAPES[this.type]
+  shape: string[][] = SHAPES[this.type]
 
   constructor(game: Game) {
     this.game = game
     this.x = 9
     this.y = 0
+
+    window.addEventListener('keydown', (event) => {
+      this.keyState[event.key] = true
+    })
+
+    window.addEventListener('keyup', (event) => {
+      this.keyState[event.key] = false
+    })
   }
 
-  update(input: string[], deltaTime: number, timeStamp: number) {
+  update(deltaTime: number, timeStamp: number) {
     if (timeStamp - this.lastMoveDownTime > this.moveDownInterval) {
       this.lastMoveDownTime = timeStamp
       this.moveDown()
     }
 
-    if (input.includes('ArrowRight')) {
+    if (this.keyState['ArrowRight']) {
       this.moveRight()
-    } else if (input.includes('ArrowLeft')) {
+      delete this.keyState['ArrowRight']
+    } else if (this.keyState['ArrowLeft']) {
       this.moveLeft()
-    } else if (input.includes('ArrowUp')) {
+      delete this.keyState['ArrowLeft']
+    } else if (this.keyState['ArrowUp']) {
       this.rotate()
-    } else if (input.includes('ArrowDown')) {
+      delete this.keyState['ArrowUp']
+    } else if (this.keyState['ArrowDown']) {
       this.moveDown(2)
+      delete this.keyState['ArrowDown']
     }
   }
 
@@ -68,7 +82,27 @@ export class Tetromino {
   moveLeft(dx: number = 1) {
     this.x -= dx
   }
-  rotate() {}
+  rotate() {
+    const rotatedShape: string[][] = []
+    const shape = this.shape
+    const rows = shape.length
+    const cols = shape[0].length
+
+    for (let col = 0; col < cols; col++) {
+      rotatedShape[col] = []
+      for (let row = 0; row < rows; row++) {
+        rotatedShape[col][row] = shape[rows - row - 1][col]
+      }
+    }
+
+    const maxX = this.game.board[0].length - rotatedShape[0].length
+    const maxY = this.game.board.length - rotatedShape.length
+    if (this.x > maxX || this.y > maxY) {
+      return
+    }
+
+    this.shape = rotatedShape
+  }
 
   isNextMoveValid() {
     console.log('isNextMoveValid')
