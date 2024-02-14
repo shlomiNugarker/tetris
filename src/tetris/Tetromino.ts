@@ -41,7 +41,7 @@ export class Tetromino {
 
   constructor(game: Game) {
     this.game = game
-    this.x = 9
+    this.x = 14
     this.y = 0
 
     window.addEventListener('keydown', (event) => {

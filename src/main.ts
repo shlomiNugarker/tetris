@@ -3,8 +3,6 @@ import './tetris/index'
 import { Game } from './tetris/index'
 
 const canvas = <HTMLCanvasElement>document.getElementById('canvas')
-canvas.width = 500
-canvas.height = 500
 
 const game = new Game(canvas)
 
