@@ -57,7 +57,7 @@ When a line is completed, it disappears, and the player scores points.
 - HTML Canvas
 
 <a href="https://shlominugarker.github.io/tetris/" target="_blank">
- <img src="https://res.cloudinary.com/duajg3ah1/image/upload/v1707876390/myPortfolio/iyhj3ijbrdrsivwat39b.png" width="100%" title="">
+ <img src="https://res.cloudinary.com/duajg3ah1/image/upload/v1707876390/myPortfolio/iyhj3ijbrdrsivwat39b.png" width="50%" title="">
 </a>
 
   
