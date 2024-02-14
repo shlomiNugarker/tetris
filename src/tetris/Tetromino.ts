@@ -28,7 +28,7 @@ export class Tetromino {
   public x: number
   public y: number
   public game: Game
-  moveDownInterval = 500
+  moveDownInterval = 300
   lastMoveDownTime = 0
   isMoveEnd = false
 
@@ -41,7 +41,7 @@ export class Tetromino {
 
   constructor(game: Game) {
     this.game = game
-    this.x = 14
+    this.x = Math.floor(this.game.boardSize - this.game.spaceWidth) / 2
     this.y = 0
 
     window.addEventListener('keydown', (event) => {
@@ -122,7 +122,7 @@ export class Tetromino {
 
     if (
       nextX < 0 ||
-      nextX + cols > this.game.board[0].length ||
+      nextX + cols > this.game.board[0].length - this.game.spaceWidth ||
       nextY + rows > this.game.board.length
     ) {
       return false

@@ -2,6 +2,11 @@ import { Tetromino } from './Tetromino'
 
 export class Game {
   isGameOver: boolean = false
+  points = 0
+  boardSize = 30
+  spaceWidth = 10
+  level = 1
+  time = 0
   board: (
     | 'straight'
     | 'square'
@@ -10,7 +15,9 @@ export class Game {
     | 'skew'
     | ''
   )[][] = []
+
   currentTetromino: Tetromino | null = null
+  nextTetromino: Tetromino | null = null
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
 
@@ -25,19 +32,23 @@ export class Game {
   }
 
   private initBoard() {
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < this.boardSize; i++) {
       this.board[i] = []
-      for (let j = 0; j < 30; j++) {
+      for (let j = 0; j < this.boardSize; j++) {
         this.board[i][j] = ''
       }
     }
   }
 
   addTetromino() {
-    this.currentTetromino = new Tetromino(this)
+    this.nextTetromino = new Tetromino(this)
+    this.currentTetromino = this.nextTetromino
+    this.nextTetromino = new Tetromino(this)
   }
 
   update(deltaTime: number, timeStamp: number) {
+    this.time += deltaTime
+
     this.currentTetromino?.update(deltaTime, timeStamp)
 
     if (this.currentTetromino?.isMoveEnd) {
@@ -68,13 +79,20 @@ export class Game {
       if (this.isRowFull(row)) {
         this.clearRow(row)
         this.moveRowsDown(row)
+        this.points += 10
         row++
       }
     }
   }
 
   isRowFull(row: number): boolean {
-    return this.board[row].every((cell) => cell !== '')
+    let isFull = true
+
+    for (let i = 0; i < this.board[row].length - this.spaceWidth; i++) {
+      const cell = this.board[row][i]
+      if (cell === '') isFull = false
+    }
+    return isFull
   }
 
   clearRow(row: number) {
@@ -92,11 +110,16 @@ export class Game {
     this.board[0].fill('')
   }
 
-  drawBlock(x: number, y: number, color: string) {
-    const BLOCK_SIZE_WIDTH = this.canvas.width / 30
-    const BLOCK_SIZE_HEIGHT = this.canvas.height / 30
+  drawBlock(
+    x: number,
+    y: number,
+    fillStyle: string,
+    strokeStyle: string = 'white'
+  ) {
+    const BLOCK_SIZE_WIDTH = this.canvas.width / this.boardSize
+    const BLOCK_SIZE_HEIGHT = this.canvas.height / this.boardSize
 
-    this.ctx.fillStyle = color
+    this.ctx.fillStyle = fillStyle
 
     this.ctx.fillRect(
       x * BLOCK_SIZE_WIDTH,
@@ -104,7 +127,7 @@ export class Game {
       BLOCK_SIZE_WIDTH,
       BLOCK_SIZE_HEIGHT
     )
-    this.ctx.strokeStyle = 'white'
+    this.ctx.strokeStyle = strokeStyle
 
     this.ctx.strokeRect(
       x * BLOCK_SIZE_WIDTH,
@@ -116,11 +139,19 @@ export class Game {
 
   drawBoard() {
     for (let row = 0; row < this.board.length; row++) {
-      for (let col = 0; col < this.board[0].length; col++) {
-        if (this.board[row][col]) {
-          const color = this.getBlockColor(this.board[row][col])
-          this.drawBlock(col, row, color)
-        } else this.drawBlock(col, row, 'lightgray')
+      for (let col = 0; col < this.board[0].length - 1; col++) {
+        //
+        const isGoingToDrawInsideBoardGame =
+          col >= 0 && col < this.board[0].length - this.spaceWidth
+
+        if (isGoingToDrawInsideBoardGame) {
+          if (this.board[row][col]) {
+            const color = this.getBlockColor(this.board[row][col])
+            this.drawBlock(col, row, color)
+          } else this.drawBlock(col, row, 'lightgray')
+        } else if (!isGoingToDrawInsideBoardGame) {
+          this.drawBlock(col, row, 'lightblue', 'lightblue')
+        }
       }
     }
   }
