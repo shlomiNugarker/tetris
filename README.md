@@ -25,7 +25,7 @@ When a line is completed, it disappears, and the player scores points.
 
 3. **Build the project:**
 
-4. 4. **Open `index.html` in a web browser to play the game.**
+4.  **Open `index.html` in a web browser to play the game.**
 
 # Gameplay
 
