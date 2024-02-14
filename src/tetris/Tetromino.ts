@@ -28,7 +28,7 @@ export class Tetromino {
   public x: number
   public y: number
   public game: Game
-  moveDownInterval = 1000
+  moveDownInterval = 500
   lastMoveDownTime = 0
   isMoveEnd = false
 

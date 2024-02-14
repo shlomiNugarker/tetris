@@ -104,7 +104,7 @@ export class Game {
       BLOCK_SIZE_WIDTH,
       BLOCK_SIZE_HEIGHT
     )
-    this.ctx.strokeStyle = 'lightgray'
+    this.ctx.strokeStyle = 'white'
 
     this.ctx.strokeRect(
       x * BLOCK_SIZE_WIDTH,
