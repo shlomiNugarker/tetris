@@ -62,6 +62,4 @@ When a line is completed, it disappears, and the player scores points.
 
   
 
-# License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
