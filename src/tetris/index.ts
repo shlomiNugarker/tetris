@@ -2,15 +2,22 @@ import { Tetromino } from './Tetromino'
 
 export class Game {
   isGameOver: boolean = false
-  board: string[][] = []
+  board: (
+    | 'straight'
+    | 'square'
+    | 'tTetromino'
+    | 'lTetromino'
+    | 'skew'
+    | ''
+  )[][] = []
   currentTetromino: Tetromino | null = null
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
-    this.canvas.width = 500
-    this.canvas.height = 500
+    this.canvas.width = 600
+    this.canvas.height = 600
     this.ctx = canvas.getContext('2d')!
 
     this.initBoard()
@@ -18,9 +25,9 @@ export class Game {
   }
 
   private initBoard() {
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 30; i++) {
       this.board[i] = []
-      for (let j = 0; j < 20; j++) {
+      for (let j = 0; j < 30; j++) {
         this.board[i][j] = ''
       }
     }
@@ -35,8 +42,19 @@ export class Game {
 
     if (this.currentTetromino?.isMoveEnd) {
       this.currentTetromino.addTetrominoToMatrix()
+      this.checkAndClearFullRows()
       this.currentTetromino = null
       this.currentTetromino = new Tetromino(this)
+
+      if (
+        !this.currentTetromino.isNextMoveEmpty(
+          this.currentTetromino.x,
+          this.currentTetromino.y
+        )
+      ) {
+        this.isGameOver = true
+        alert('game over')
+      }
     }
   }
 
@@ -45,9 +63,38 @@ export class Game {
     this.currentTetromino?.draw(this.ctx)
   }
 
+  checkAndClearFullRows() {
+    for (let row = this.board.length - 1; row >= 0; row--) {
+      if (this.isRowFull(row)) {
+        this.clearRow(row)
+        this.moveRowsDown(row)
+        row++
+      }
+    }
+  }
+
+  isRowFull(row: number): boolean {
+    return this.board[row].every((cell) => cell !== '')
+  }
+
+  clearRow(row: number) {
+    for (let col = 0; col < this.board[row].length; col++) {
+      this.board[row][col] = ''
+    }
+  }
+
+  moveRowsDown(clearedRow: number) {
+    for (let row = clearedRow - 1; row >= 0; row--) {
+      for (let col = 0; col < this.board[row].length; col++) {
+        this.board[row + 1][col] = this.board[row][col]
+      }
+    }
+    this.board[0].fill('')
+  }
+
   drawBlock(x: number, y: number, color: string) {
-    const BLOCK_SIZE_WIDTH = this.canvas.width / 20
-    const BLOCK_SIZE_HEIGHT = this.canvas.height / 20
+    const BLOCK_SIZE_WIDTH = this.canvas.width / 30
+    const BLOCK_SIZE_HEIGHT = this.canvas.height / 30
 
     this.ctx.fillStyle = color
 
@@ -57,7 +104,7 @@ export class Game {
       BLOCK_SIZE_WIDTH,
       BLOCK_SIZE_HEIGHT
     )
-    this.ctx.strokeStyle = 'white'
+    this.ctx.strokeStyle = 'lightgray'
 
     this.ctx.strokeRect(
       x * BLOCK_SIZE_WIDTH,
