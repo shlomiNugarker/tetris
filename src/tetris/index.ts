@@ -157,7 +157,7 @@ export class Game {
             this.drawBlock(col, row, color)
           } else this.drawBlock(col, row, 'lightgray')
         } else if (!isGoingToDrawInsideBoardGame) {
-          this.drawBlock(col, row, 'lightblue')
+          this.drawBlock(col, row, 'lightblue', 'lightblue')
         }
       }
     }
