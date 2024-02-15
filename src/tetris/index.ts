@@ -1,12 +1,14 @@
 import { Tetromino } from './Tetromino'
+import { UI } from './UI'
 
 export class Game {
   isGameOver: boolean = false
   points = 0
   boardSize = 30
-  spaceWidth = 10
+  spaceWidth = 8
   level = 1
   time = 0
+  moveDownInterval = 700
   board: (
     | 'straight'
     | 'square'
@@ -20,12 +22,14 @@ export class Game {
   nextTetromino: Tetromino | null = null
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
+  UI: UI
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.canvas.width = 600
     this.canvas.height = 600
     this.ctx = canvas.getContext('2d')!
+    this.UI = new UI(this)
 
     this.initBoard()
     this.addTetromino()
@@ -41,8 +45,7 @@ export class Game {
   }
 
   addTetromino() {
-    this.nextTetromino = new Tetromino(this)
-    this.currentTetromino = this.nextTetromino
+    this.currentTetromino = this.nextTetromino || new Tetromino(this)
     this.nextTetromino = new Tetromino(this)
   }
 
@@ -54,8 +57,7 @@ export class Game {
     if (this.currentTetromino?.isMoveEnd) {
       this.currentTetromino.addTetrominoToMatrix()
       this.checkAndClearFullRows()
-      this.currentTetromino = null
-      this.currentTetromino = new Tetromino(this)
+      this.addTetromino()
 
       if (
         !this.currentTetromino.isNextMoveEmpty(
@@ -64,7 +66,7 @@ export class Game {
         )
       ) {
         this.isGameOver = true
-        alert('game over')
+        // alert('game over')
       }
     }
   }
@@ -72,6 +74,7 @@ export class Game {
   draw() {
     this.drawBoard()
     this.currentTetromino?.draw(this.ctx)
+    this.UI.draw(this.ctx)
   }
 
   checkAndClearFullRows() {
@@ -79,8 +82,13 @@ export class Game {
       if (this.isRowFull(row)) {
         this.clearRow(row)
         this.moveRowsDown(row)
-        this.points += 10
         row++
+        this.points += 10
+
+        if (this.points && this.points % 100 === 0) {
+          this.level += 1
+          if (this.moveDownInterval > 50) this.moveDownInterval -= 20
+        }
       }
     }
   }
@@ -139,8 +147,7 @@ export class Game {
 
   drawBoard() {
     for (let row = 0; row < this.board.length; row++) {
-      for (let col = 0; col < this.board[0].length - 1; col++) {
-        //
+      for (let col = 0; col < this.board[0].length; col++) {
         const isGoingToDrawInsideBoardGame =
           col >= 0 && col < this.board[0].length - this.spaceWidth
 
@@ -150,7 +157,7 @@ export class Game {
             this.drawBlock(col, row, color)
           } else this.drawBlock(col, row, 'lightgray')
         } else if (!isGoingToDrawInsideBoardGame) {
-          this.drawBlock(col, row, 'lightblue', 'lightblue')
+          this.drawBlock(col, row, 'lightblue')
         }
       }
     }

@@ -28,7 +28,7 @@ export class Tetromino {
   public x: number
   public y: number
   public game: Game
-  moveDownInterval = 300
+
   lastMoveDownTime = 0
   isMoveEnd = false
 
@@ -54,7 +54,7 @@ export class Tetromino {
   }
 
   update(_deltaTime: number, timeStamp: number) {
-    if (timeStamp - this.lastMoveDownTime > this.moveDownInterval) {
+    if (timeStamp - this.lastMoveDownTime > this.game.moveDownInterval) {
       this.lastMoveDownTime = timeStamp
       this.moveDown()
     }
