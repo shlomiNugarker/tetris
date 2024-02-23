@@ -19,8 +19,7 @@ When a line is completed, it disappears, and the player scores points.
 
 # Setup
 
-1. **Clone the repository:** git clone https://github.com/shlomiNugarker/tetris.git
-
+1. **Clone the repository** 
 2. **Install dependencies:** npm install
 
 3. **Build the project:** npm run build
