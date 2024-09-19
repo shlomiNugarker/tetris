@@ -19,8 +19,7 @@ When a line is completed, it disappears, and the player scores points.
 
 # Setup
 
-1. **Clone the repository:** git clone https://github.com/shlomiNugarker/tetris.git
-
+1. **Clone the repository** 
 2. **Install dependencies:** npm install
 
 3. **Build the project:** npm run build
@@ -33,9 +32,9 @@ When a line is completed, it disappears, and the player scores points.
 - Arrow keys: Move Tetrominoes left, right, up, or down, and rotate them.
 - `Space`: Hard drop (instantly move Tetromino down to the lowest possible position).
 
-- **Scoring: (soon)**
-- Clear one line: 100 points.
-- Clear two lines simultaneously (Tetris): 400 points.
+- **Scoring:**
+- Clear one line: 10 points.
+- Clear two lines simultaneously (Tetris): 20 points.
 - Clearing multiple lines at once increases the score multiplier.
 
 - **Game Over:**
@@ -44,9 +43,8 @@ When a line is completed, it disappears, and the player scores points.
 # Files Structure
 
 - **`src/`**: Contains TypeScript source code.
-- `Game.ts`: Defines the `Game` class responsible for game logic.
+- `tetris/index.ts`: Defines the `Game` class responsible for game logic.
 - `Tetromino.ts`: Defines the `Tetromino` class representing Tetromino shapes.
-- `index.ts`: Entry point for the game.
 
 - **`style.css`**: Contains styles for the game interface.
 - **`index.html`**: HTML file for rendering the game.
