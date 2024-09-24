@@ -19,35 +19,25 @@ const SHAPES = {
     ["", "skew", "skew"],
     ["skew", "skew", ""],
   ],
-
-  // צורת Z
   zTetromino: [
     ["zTetromino", "zTetromino", ""],
     ["", "zTetromino", "zTetromino"],
   ],
-
-  // צורת X
   xTetromino: [
     ["xTetromino", "", "xTetromino"],
     ["", "xTetromino", ""],
     ["xTetromino", "", "xTetromino"],
   ],
-
-  // צורת U
   uTetromino: [
     ["uTetromino", "", "uTetromino"],
     ["uTetromino", "", "uTetromino"],
     ["uTetromino", "uTetromino", "uTetromino"],
   ],
-
-  // צורת פלוס (+)
   plusTetromino: [
     ["", "plusTetromino", ""],
     ["plusTetromino", "plusTetromino", "plusTetromino"],
     ["", "plusTetromino", ""],
   ],
-
-  // צורת פטיש
   hammerTetromino: [
     ["hammerTetromino", "hammerTetromino", "hammerTetromino"],
     ["", "hammerTetromino", ""],
