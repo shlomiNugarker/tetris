@@ -4,19 +4,12 @@ import { UI } from "./UI";
 export class Game {
   isGameOver: boolean = false;
   points = 0;
-  boardSize = 30;
+  boardSize: number;
   spaceWidth = 8;
   level = 1;
   time = 0;
   moveDownInterval = 700;
-  board: (
-    | "straight"
-    | "square"
-    | "tTetromino"
-    | "lTetromino"
-    | "skew"
-    | ""
-  )[][] = [];
+  board: string[][] = [];
 
   currentTetromino: Tetromino | null = null;
   nextTetromino: Tetromino | null = null;
@@ -24,7 +17,7 @@ export class Game {
   ctx: CanvasRenderingContext2D;
   UI: UI;
 
-  constructor(canvas: HTMLCanvasElement, boardSize: number = 30) {
+  constructor(canvas: HTMLCanvasElement, boardSize: number) {
     this.canvas = canvas;
     this.canvas.width = 600;
     this.canvas.height = 600;
@@ -171,6 +164,11 @@ export class Game {
       tTetromino: "green",
       lTetromino: "black",
       skew: "orange",
+      zTetromino: "purple",
+      xTetromino: "yellow",
+      uTetromino: "cyan",
+      plusTetromino: "#5d6f1a",
+      hammerTetromino: "brown",
     };
     return colorMap[blockType] || "lightgray";
   }

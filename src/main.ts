@@ -2,9 +2,9 @@ import "./style.css";
 import "./tetris/index";
 import { Game } from "./tetris/index";
 
-function startNewGame() {
+function startNewGame(boardSize = 25) {
   const canvas = <HTMLCanvasElement>document.getElementById("canvas");
-  let game = new Game(canvas);
+  let game = new Game(canvas, boardSize);
 
   let lastTime = 0;
 
@@ -17,7 +17,7 @@ function startNewGame() {
     if (!game.isGameOver) {
       requestAnimationFrame(gameLoop);
     } else {
-      game = new Game(canvas);
+      game = new Game(canvas, boardSize);
       lastTime = 0;
       requestAnimationFrame(gameLoop);
     }
@@ -26,4 +26,17 @@ function startNewGame() {
   gameLoop(0);
 }
 
-startNewGame();
+startNewGame(40);
+
+document.querySelector(".mat-20")?.addEventListener("click", () => {
+  startNewGame(20);
+});
+document.querySelector(".mat-30")?.addEventListener("click", () => {
+  startNewGame(30);
+});
+document.querySelector(".mat-40")?.addEventListener("click", () => {
+  startNewGame(40);
+});
+document.querySelector(".mat-50")?.addEventListener("click", () => {
+  startNewGame(50);
+});

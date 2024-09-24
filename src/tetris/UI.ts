@@ -53,22 +53,27 @@ export class UI {
 
     // Draw the next Tetromino:
     if (this.game.nextTetromino) {
-      if (this.game.nextTetromino) {
-        for (let row = 0; row < this.game.nextTetromino.shape.length; row++) {
-          for (
-            let col = 0;
-            col < this.game.nextTetromino.shape[row].length;
-            col++
-          ) {
-            const blockType = this.game.nextTetromino.shape[row][col];
-            if (blockType) {
-              const color = this.game.getBlockColor(blockType);
-              this.game.drawBlock(25 + col, 6 + row, color);
-            }
+      const shape = this.game.nextTetromino.shape;
+
+      // Calculate the starting X position to center the shape inside the spaceWidth
+      const shapeWidth = shape[0].length; // The width of the Tetromino in blocks
+      const spaceWidthInBlocks = this.game.spaceWidth; // The width of the space in blocks
+      const startX =
+        this.game.boardSize -
+        spaceWidthInBlocks +
+        Math.floor((spaceWidthInBlocks - shapeWidth) / 2); // Calculate the centered X position
+
+      for (let row = 0; row < shape.length; row++) {
+        for (let col = 0; col < shape[row].length; col++) {
+          const blockType = shape[row][col];
+          if (blockType) {
+            const color = this.game.getBlockColor(blockType);
+            this.game.drawBlock(startX + col, 6 + row, color); // 6 is the vertical position
           }
         }
       }
     }
+
     // draw score:
     const textMetricsScore = context.measureText("Score");
     context.fillStyle = "black";
