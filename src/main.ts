@@ -26,4 +26,4 @@ function startNewGame(boardSize = 25) {
   gameLoop(0);
 }
 
-startNewGame(30);
+startNewGame(20);
