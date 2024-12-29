@@ -26,17 +26,4 @@ function startNewGame(boardSize = 25) {
   gameLoop(0);
 }
 
-startNewGame(40);
-
-document.querySelector(".mat-20")?.addEventListener("click", () => {
-  startNewGame(20);
-});
-document.querySelector(".mat-30")?.addEventListener("click", () => {
-  startNewGame(30);
-});
-document.querySelector(".mat-40")?.addEventListener("click", () => {
-  startNewGame(40);
-});
-document.querySelector(".mat-50")?.addEventListener("click", () => {
-  startNewGame(50);
-});
+startNewGame(30);
