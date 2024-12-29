@@ -19,30 +19,6 @@ const SHAPES = {
     ["", "skew", "skew"],
     ["skew", "skew", ""],
   ],
-  zTetromino: [
-    ["zTetromino", "zTetromino", ""],
-    ["", "zTetromino", "zTetromino"],
-  ],
-  xTetromino: [
-    ["xTetromino", "", "xTetromino"],
-    ["", "xTetromino", ""],
-    ["xTetromino", "", "xTetromino"],
-  ],
-  uTetromino: [
-    ["uTetromino", "", "uTetromino"],
-    ["uTetromino", "", "uTetromino"],
-    ["uTetromino", "uTetromino", "uTetromino"],
-  ],
-  plusTetromino: [
-    ["", "plusTetromino", ""],
-    ["plusTetromino", "plusTetromino", "plusTetromino"],
-    ["", "plusTetromino", ""],
-  ],
-  hammerTetromino: [
-    ["hammerTetromino", "hammerTetromino", "hammerTetromino"],
-    ["", "hammerTetromino", ""],
-    ["", "hammerTetromino", ""],
-  ],
 };
 
 export const types = Object.keys(SHAPES);

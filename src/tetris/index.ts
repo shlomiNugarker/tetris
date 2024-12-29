@@ -19,8 +19,8 @@ export class Game {
 
   constructor(canvas: HTMLCanvasElement, boardSize: number) {
     this.canvas = canvas;
-    this.canvas.width = 600;
-    this.canvas.height = 600;
+    this.canvas.width = 400;
+    this.canvas.height = 400;
     this.ctx = canvas.getContext("2d")!;
     this.UI = new UI(this);
     this.boardSize = boardSize;
